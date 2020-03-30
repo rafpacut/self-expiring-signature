@@ -7,6 +7,8 @@ class TimeEphemeralDataFetcher{
             case "reddit":
                 let rf = new RedditFetcher(duration);
                 return rf.fetchTop10()
+            case "test":
+                return "foo"
         }
     }
 

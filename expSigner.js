@@ -2,7 +2,6 @@ const ShnorrSigner = require('./signatureSchemes/shnorr/Signer.js')
 const ShnorrVerifier = require('./signatureSchemes/shnorr/Verifier.js')
 const TimeEphemeralDataFetcher = require('./dataSources/ephDataFetcher.js')
 const crypto = require("crypto")
-const mcl = require('mcl-wasm')
 
 class ExpiringSignature
 {
@@ -12,7 +11,7 @@ class ExpiringSignature
    }
 
    async sign(msg){
-       let mode = "reddit"
+       let mode = "test"
        let signer = new ShnorrSigner()
        let ephData = await this.timeDataSrc.fetchData(this.expiryDate, mode)
        let ephHash = this.hashData(ephData)
@@ -33,15 +32,5 @@ class ExpiringSignature
         hash.update(Buffer.from(data))
         return hash.digest()
     }
-
 }
-
-mcl.init(mcl.BLS12_381).then(()=>{
-let msg = "foo"
-let es = new ExpiringSignature("2020-03-31")
-es.sign(msg)
-.then(res =>{
-    let [signature, timeEphSrc, pubKey] = res
-    es.verify(msg, signature, timeEphSrc, pubKey)
-})
-})
+module.exports = ExpiringSignature
