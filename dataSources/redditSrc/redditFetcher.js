@@ -16,7 +16,8 @@ class RedditFetcher{
     }
 
     fetchTop10(){
-        return this.r.getTop( this.params.subRedditName, {time: "week", limit: 10})
+        let subRedditOptions = {time: this.params.tFilter, limit : 10}
+        return this.r.getTop( this.params.subRedditName, subRedditOptions)
     }
 
     fitParametersToDuration(duration){

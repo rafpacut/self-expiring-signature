@@ -1,5 +1,4 @@
 const RedditFetcher = require('./redditSrc/redditFetcher.js')
-const testFetcher = require('./testSrc/testSrc.js')
 
 class TimeEphemeralDataFetcher{
     fetchData(expiryDate, source){
