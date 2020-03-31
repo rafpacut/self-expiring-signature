@@ -5,15 +5,14 @@ const crypto = require("crypto")
 
 class ExpiringSignature
 {
-   constructor(expiryDate){
-       this.expiryDate = expiryDate 
+   constructor(){
        this.timeDataSrc = new TimeEphemeralDataFetcher()
    }
 
-   async sign(msg){
+   async sign(msg, expiryDate){
        let mode = "test"
        let signer = new ShnorrSigner()
-       let ephData = await this.timeDataSrc.fetchData(this.expiryDate, mode)
+       let ephData = await this.timeDataSrc.fetchData(expiryDate, mode)
        let ephHash = this.hashData(ephData)
        let signature = signer.sign(msg, ephHash)
        return [signature, mode, signer.publicKey]
