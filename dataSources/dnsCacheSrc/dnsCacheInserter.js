@@ -30,7 +30,7 @@ class DNSCacheInserter
             if(bit == '1')
             {
                 for(const srv of servers){
-                    await dig(['@'+srv, nonExistingSubDomain+'.example.com']);
+                    dig(['@'+srv, nonExistingSubDomain+'.example.com']);
                 };
             }
         };
