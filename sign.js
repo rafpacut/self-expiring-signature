@@ -4,23 +4,14 @@ const mcl = require('mcl-wasm')
 
 mcl.init(mcl.BLS12_381).then(()=>{
 
-let [expiryDate, msg] = utils.processCmdArgs()
-es = new ExpiringSignature()
-es.sign(msg, expiryDate)
-.then(res =>{
-    let [signature, mode, signerPublicKey] = res
-    let [s, X] = signature
-let signatureJson = JSON.stringify({
-                                "signature": {
-                                    "s" : s.getStr(),
-                                    "X": X.getStr()
-                                },
-                                "mode": mode,
-                                "signerPublicKey": signerPublicKey.getStr(),
-                                "msg" : msg
-                            })
+let [msg, mode] = utils.processCmdArgs();
 
-utils.saveSignatureToFile(signatureJson, expiryDate)
-})
-
-})
+(async () => {
+    es = new ExpiringSignature(mode);
+    let sign = await es.sign(msg);
+    utils.saveSignatureToFile(sign, mode, msg);
+    if(mode=="dns"){
+        es.keepAlive();
+    }
+})();//end of async signature creation
+});//end of mcl promise

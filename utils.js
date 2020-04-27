@@ -5,25 +5,32 @@ function isDate(input){
     return new Date(input) != 'Invalid Date'
 }
 
+function isMode(arg){
+    if(arg == "dns" || arg == "reddit"){
+        return true;
+    }
+    return false;
+}
+
 function processCmdArgs(){
     let argv = process.argv
     if(argv.length < 3){
-        throw 'No message and no expiry date provided'
+        throw 'No message and no mode provided'
     }
 
-    let date, msg
-    if(isDate(argv[2])){
-        date = new Date(argv[2])
-        msg = argv[3]
+    let mode, msg;
+    if(isMode(argv[2])){
+        mode = argv[2];
+        msg = argv[3];
     }
-    else if(isDate(argv[3])){
-        msg = argv[2]
-        date = new Date(argv[3])
+    else if(isMode(argv[3])){
+        msg = argv[2];
+        mode = argv[3];
     }
     else{
-        throw "Provide a message and an expiry date"
+        throw "Provide a message and a mode";
     }
-    return [date, msg]
+    return [msg, mode]
 }
 
 function readSignature(){
@@ -40,7 +47,8 @@ function readSignature(){
             "signature": [s, X],
             "mode": rawData.mode,
             "signerPublicKey": signerPublicKey,
-            "msg": rawData.msg
+            "msg": rawData.msg,
+            "portrayal" : rawData.portrayal
     }
 }
 
@@ -58,22 +66,39 @@ function readFromFile(){
     }
 }
 
+function createSignatureJSON(sign, mode, msg){
+    let [signature, signerPublicKey, portrayal] = sign;
+    let [s, X] = signature;
+    let signatureJson = JSON.stringify({
+                                    "signature": {
+                                        "s" : s.getStr(),
+                                        "X": X.getStr()
+                                    },
+                                    "mode": mode,
+                                    "signerPublicKey": signerPublicKey.getStr(),
+                                    "msg" : msg,
+                                    "portrayal" : portrayal
+                                });
+    return signatureJson;
+}
 
-function saveSignatureToFile(signatureJson, expiryDate, filePath="default"){
+function saveSignatureToFile(sign, mode, msg, filePath="default"){
+    let signatureJson = createSignatureJSON(sign, mode, msg);
     if(filePath != "default"){
         fs.access(filePath, (err) => {//if file does not exist
            fs.writeFileSync(filePath, signatureJson, (err) =>{
                 throw `While saving signature to ${filePath} : ${err}`
            }) 
         })
+        return true;
     }
 
     let signaturesDir = './signatures/'
     let signatureFilesNum = fs.readdirSync(signaturesDir).length
-    let expiryDateString = expiryDate.toISOString().slice(0,10)
+    let date = new Date().toISOString().slice(0,10);
 
     for(i = 0; i < signatureFilesNum+1; i++){
-        let signatureFilePath = `./signatures/${expiryDateString}_${i}.ephSign`
+        let signatureFilePath = `./signatures/${date}_${i}.ephSign`
         try{
             fs.accessSync(signatureFilePath)//throws if path does not exist
         } catch(err){//if path does not exist, write to it.
