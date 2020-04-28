@@ -3,7 +3,7 @@ const DNSCacheInserter = require('./dnsCacheInserter.js');
 
 class DNSDataGenerator
 {
-    async genData(conf){
+    async gen(conf){
         let dci = new DNSCacheInserter(conf.dnsPortrayalSize, conf.subDomainNameLength);
 
         let randData = crypto.randomBytes(conf.dataByteLength);

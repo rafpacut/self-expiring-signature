@@ -7,27 +7,34 @@ const crypto = require("crypto")
 class ExpiringSignature
 {
    constructor(mode){
-       this.ephDataSource = new EphDataSource();
+       this.ephDataSource = new EphDataSource(mode);
        this.mode = mode;
        this.dnsRefresher = new DNSRefresher();
 
-       this.dnsSignConfig = {
+       const dnsSignConfig = {
            'dnsPortrayalSize' : 2,
            'subDomainNameLength' : 4,
            'dataByteLength': 1
        }
-   }
-
-   async sign(msg){
-       if(this.mode == "dns"){
-           return await this.dnsSign(msg);
+       //sample config -- actually I want to forward user's expiration date and handle that in dataGenerator
+       const redditSignConfig = {
+           'subreddits' : ["askreddit"],
+           'tFilters'   : ["week"]
+       }
+       if(mode == "dns"){
+           this.dataSrcConf = dnsSignConfig;
+       }
+       else{
+           this.dataSrcConf = redditSignConfig;
        }
    }
 
-   async dnsSign(msg){
+   async sign(msg){
        let signer = new ShnorrSigner();
-       let [ephData, portrayal] = await this.ephDataSource.genData(this.mode, this.dnsSignConfig);
-       this.dnsRefresher.storeRefreshData(ephData, portrayal);
+       let [ephData, portrayal] = await this.ephDataSource.genData(this.dataSrcConf);
+       if(this.mode == "dns"){
+           this.dnsRefresher.storeRefreshData(ephData, portrayal);
+       }
        let ephHash = this.hashData(ephData)
        let signature = signer.sign(msg, ephHash)
        return [signature, signer.publicKey, portrayal]
@@ -37,7 +44,7 @@ class ExpiringSignature
         this.dnsRefresher.keepAlive();
    }
 
-   async verify(msg, signature, mode, signerPubKey, portrayal){
+   async verify(msg, signature, signerPubKey, portrayal){
        let [s, X] = signature
        let verifier = new ShnorrVerifier(signerPubKey)
        let ephData = await this.ephDataSource.fetchData(portrayal)

@@ -1,28 +1,28 @@
 const RedditFetcher = require('./redditSrc/redditFetcher.js')
+const RedditDataGenerator = require('./redditSrc/redditDataGenerator.js');
 const DNSCacheFetcher = require('./dnsCacheSrc/dnsCacheFetcher.js');
 const DNSDataGenerator = require('./dnsCacheSrc/dnsDataGenerator.js');
 
 class EphDataSource{
-    async fetchData(portrayal){
-        let source = "dns";
-        switch(source){
+    constructor(mode){
+        switch(mode){
             case "reddit":
-                let duration = 5; //a dummy
-                let rf = new RedditFetcher(duration);
-                return rf.fetchTop10()
+                this.dataGen = new RedditDataGenerator();
+                this.fetcher = new RedditFetcher();
+                break;
             case "dns":
-                let dcf = new DNSCacheFetcher()
-                return await dcf.fetch(portrayal);
-            case "test":
-                return "foo"
+                this.dataGen = new DNSDataGenerator();
+                this.fetcher = new DNSCacheFetcher();
+                break;
         }
     }
 
-    async genData(mode, conf){
-        if(mode == "dns"){
-            let dg = new DNSDataGenerator();
-            return await dg.genData(conf);
-        }
+    fetchData(conf){
+        return this.fetcher.fetch(conf);
+    }
+
+    genData(conf){
+        return this.dataGen.gen(conf);
     }
 }
 
