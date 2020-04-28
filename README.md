@@ -11,6 +11,7 @@ Implemented with ECC provided by [mcl](https://github.com/herumi/mcl-wasm).
 
 #### install dependencies:
 `apt install nodejs npm`
+
 `npm install`
 
 #### data sources configuration:
