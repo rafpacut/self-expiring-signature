@@ -1,6 +1,6 @@
 ## Self-expiring signature
 
-This is a (slightly) modified Shnorr Signature Scheme. The message is hashed with publicly accessible ephemeral data.
+A (slightly) modified Shnorr Signature Scheme. The message is hashed with publicly accessible ephemeral data.
 Supported data sources:
 
 * DNS negative cache ([Neuralizer](https://www.sec.in.tum.de/i20/publications/neuralyzer-flexible-expiration-times-for-the-revocation-of-online-data/@@download/file/neuralyzer.pdf))
@@ -22,7 +22,7 @@ The file should contain a list of IPs.
 
 ## usage
 #### sign:
-`node sign.js <mode> <message>`
+`nodejs sign.js <mode> <message>`
 
 mode can be either: 'dns' or 'reddit'.
 
@@ -30,5 +30,5 @@ mode can be either: 'dns' or 'reddit'.
 In case of 'dns', after saving the signature to a file, the sign process will continue indefinately in order to refresh the data inserted into DNS cache.
 
 #### verify:
-`node verify.js <pathToSignatureFile>`
+`nodejs verify.js <pathToSignatureFile>`
 
