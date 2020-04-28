@@ -1,0 +1,26 @@
+{
+  "name": "wppt-msc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sign.js",
+  "dependencies": {
+    "mcl-wasm": "^0.3.7",
+    "node-dig-dns": "^0.2.10",
+    "snoowrap": "^1.21.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+	  "build" : "npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafpacut/wppt-msc.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rafpacut/wppt-msc/issues"
+  },
+  "homepage": "https://github.com/rafpacut/wppt-msc#readme"
+}
