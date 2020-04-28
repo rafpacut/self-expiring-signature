@@ -2,9 +2,7 @@ const snoowrap = require('snoowrap')
 const fs = require('fs')
 
 class RedditFetcher{
-    constructor(duration){
-        this.params = this.fitParametersToDuration(duration)
-
+    constructor(){
         const credentialsPath = "./redditAuthCredentials.json"
         const credentials = this.readCredentials(credentialsPath)
         this.r = new snoowrap(credentials)
@@ -15,16 +13,19 @@ class RedditFetcher{
         return JSON.parse(rawData)
     }
 
-    fetchTop10(){
-        let subRedditOptions = {time: this.params.tFilter, limit : 10}
-        return this.r.getTop( this.params.subRedditName, subRedditOptions)
+    async fetch(conf){
+        let tFilter = conf.tFilters[0];
+        let subredditName = conf.subreddits[0];
+        return await this.fetchTop10(subredditName, tFilter);
     }
 
-    fitParametersToDuration(duration){
-        return {
-            "subRedditName": "AskReddit",
-            "tFilter": duration
+    async fetchTop10(subRedditName, tFilter){
+        let res = await this.r.getTop( subRedditName, {time : tFilter, limit: 10});
+        let titles = [];
+        for(const submission of res){
+            titles.push(submission.title);
         }
+        return titles;
     }
 }
 
