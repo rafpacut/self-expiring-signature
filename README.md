@@ -3,7 +3,7 @@
 This is a (slightly) modified Shnorr Signature Scheme. The message is hashed with publicly accessible ephemeral data.
 Supported data sources:
 
-* DNS negative cache
+* DNS negative cache ([Neuralizer](https://www.sec.in.tum.de/i20/publications/neuralyzer-flexible-expiration-times-for-the-revocation-of-online-data/@@download/file/neuralyzer.pdf))
 * Reddit
 
 
