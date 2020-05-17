@@ -18,9 +18,9 @@ mcl.init(mcl.BLS12_381).then(()=>{
 		let sigID = req.params.signatureID;
 		let sigData = await dbmanager.getData(sigID);
 		if(sigData.length > 0){
-			res.res.send(sigData);
+			res.send(sigData);
 		}
-		res.res.status(204).end();
+		res.status(204).end();
 	});
 
 	app.post('/setData', async (req,res) => {
