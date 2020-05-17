@@ -6,7 +6,7 @@ function isDate(input){
 }
 
 function isMode(arg){
-    if(arg == "dns" || arg == "reddit"){
+    if(arg == "dns" || arg == "service" || arg == "news"){
         return true;
     }
     return false;
