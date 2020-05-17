@@ -4,10 +4,11 @@ A (slightly) modified Shnorr Signature Scheme. The message is hashed with public
 Supported data sources:
 
 * DNS negative cache ([Neuralizer](https://www.sec.in.tum.de/i20/publications/neuralyzer-flexible-expiration-times-for-the-revocation-of-online-data/@@download/file/neuralyzer.pdf))
-* Reddit
+* External server with a database service
+* News feed ([FADE](http://www.imperial.ac.uk/media/imperial-college/faculty-of-engineering/computing/public/1718-ug-projects/Sam-Wood-Self-Destructing-Data.pdf), news API provided by [NewsAPI.org](newsapi.org))
 
 
-Implemented with ECC provided by [mcl](https://github.com/herumi/mcl-wasm).
+Implemented with pairing-based cryptography provided by [mcl](https://github.com/herumi/mcl-wasm).
 
 #### install dependencies:
 `apt install nodejs npm`
@@ -15,20 +16,22 @@ Implemented with ECC provided by [mcl](https://github.com/herumi/mcl-wasm).
 `npm install`
 
 #### data sources configuration:
-To use reddit's API read [this](https://www.reddit.com/wiki/api). Save your OAuth credentials in redditAuthCredentials.json
+To use news API obtain key [here](https://newsapi.org/pricing). Save your key in dataSources/newsSrc/newsAPI.key
 
-DNS mode requires a list of server IPs. Place those in dataSources/dnsCacheSrc/serverList.json.
+DNS mode requires a list of open resolver server IPs. Place those in dataSources/dnsCacheSrc/serverList.json.
 The file should contain a list of IPs.
 
 ## usage
 #### sign:
-`nodejs sign.js <mode> <message>`
+`node sign.js <mode> <message>`
 
-mode can be either: 'dns' or 'reddit'.
+mode can be either: 'dns', 'service' or 'news'.
 
 
 In case of 'dns', after saving the signature to a file, the sign process will continue indefinately in order to refresh the data inserted into DNS cache.
 
 #### verify:
-`nodejs verify.js <pathToSignatureFile>`
+`node verify.js <pathToSignatureFile>`
+
+###### Tested on node version 14.0.1
 
