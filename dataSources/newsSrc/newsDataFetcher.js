@@ -9,10 +9,8 @@ class NewsDataFetcher{
 
     async fetch(queries){
         let data = [];
-        let portrayal = queries;
         for(const query of queries){
             let result;
-            console.log(query);
             try{//possible speedup -- don't wait for all awaits sequentially
                 result = await this.newsapi.v2.topHeadlines({'q': query});
             }catch(e){
@@ -20,7 +18,7 @@ class NewsDataFetcher{
             }
             data.push(result.articles);
         }
-        return [data, portrayal];
+        return data;
     }
 }
 module.exports = NewsDataFetcher;

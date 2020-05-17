@@ -10,7 +10,7 @@ class NewsDataGenerator{
         let key = await f.fetch(queries);
         //let [keyParts, portrayal] = await f.fetch(queries);
         //let key = reverseShamirSecretSharing.merge(keyParts, conf);
-        return [key, portrayal];
+        return [key, queries];
     }
 
     genQueries(conf){
@@ -23,9 +23,3 @@ class NewsDataGenerator{
     }
 }
 module.exports = NewsDataGenerator;
-
-(async ()=>{
-    let g = new NewsDataGenerator();
-    let conf = {'queryByteSize':5, 'queryNum': 5};
-    console.log(await g.gen(conf));
-})();
