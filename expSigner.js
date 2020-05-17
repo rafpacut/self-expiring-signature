@@ -1,6 +1,7 @@
 const ShnorrSigner = require('./signatureSchemes/shnorr/Signer.js')
 const ShnorrVerifier = require('./signatureSchemes/shnorr/Verifier.js')
 const EphDataSource = require('./dataSources/ephDataSource.js')
+const ConfigGenerator = require('./configGenerator.js');
 const DNSRefresher = require('./dataSources/dnsCacheSrc/dnsCacheRefresher.js')
 const crypto = require("crypto")
 
@@ -11,22 +12,8 @@ class ExpiringSignature
        this.mode = mode;
        this.dnsRefresher = new DNSRefresher();
 
-       const dnsSignConfig = {
-           'dnsPortrayalSize' : 2,
-           'subDomainNameLength' : 4,
-           'dataByteLength': 1
-       }
-       //sample config -- actually I want to forward user's expiration date and handle that in dataGenerator
-       const redditSignConfig = {
-           'subreddits' : ["askreddit"],
-           'tFilters'   : ["week"]
-       }
-       if(mode == "dns"){
-           this.dataSrcConf = dnsSignConfig;
-       }
-       else{
-           this.dataSrcConf = redditSignConfig;
-       }
+       const configGenerator = new ConfigGenerator();
+       this.dataSrcConf = configGenerator.genConfig(mode);
    }
 
    async sign(msg){
