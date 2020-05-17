@@ -11,8 +11,8 @@ class NewsDataFetcher{
         let data = [];
         for(const query of queries){
             let result;
-            try{//possible speedup -- don't wait for all awaits sequentially
-                result = await this.newsapi.v2.topHeadlines({'q': query});
+            try{
+                result = this.newsapi.v2.topHeadlines({'q': query});
             }catch(e){
                 throw new Error(`While fetching news data: ${e}`);
             }
