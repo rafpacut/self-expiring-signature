@@ -29,3 +29,4 @@ class ConfigGenerator{
         return {'queryByteSize':5, 'queryNum': 1};
     }
 }
+module.exports = ConfigGenerator;

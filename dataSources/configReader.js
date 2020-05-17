@@ -7,7 +7,6 @@ nameToPathMap.set('NewsDataFetcher', './dataSources/newsSrc/newsAPI.key');
 module.exports = {
 readConfig : function(callerName){
     const path = nameToPathMap.get(callerName);
-    console.log(path);
     let config;
     try{
         config = fs.readFileSync(path).toString().trim();
