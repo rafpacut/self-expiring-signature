@@ -1,3 +1,5 @@
+const crypto = require("crypto")
+
 class ConfigGenerator{
     genConfig(mode){
 
@@ -26,7 +28,8 @@ class ConfigGenerator{
     }
 
     genNewsConfig(){
-        return {'queryByteSize':5, 'queryNum': 1};
+        return {'queryByteSize':5,//it's casted to uint8 later
+                 'queryNum': 5};
     }
 }
 module.exports = ConfigGenerator;
