@@ -4,13 +4,16 @@
   "description": "",
   "main": "sign.js",
   "dependencies": {
+    "axios": "^0.19.2",
+    "express": "^4.17.1",
     "mcl-wasm": "^0.3.7",
+    "newsapi": "^2.4.0",
     "node-dig-dns": "^0.2.10",
     "snoowrap": "^1.21.0"
   },
   "devDependencies": {},
   "scripts": {
-	  "build" : "npm install",
+    "build": "npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
