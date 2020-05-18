@@ -13,7 +13,6 @@ class Client{
 
     async fetch(id){
         let response;
-        console.log(id);
         try{
            response = await axios.get(`http://${this.hostname}:${this.port}/getData/${id}`);
         }catch(e){
