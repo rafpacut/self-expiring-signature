@@ -1,12 +1,9 @@
-//load the ip, port config
-//query, check the response, return result
-//put data in
 const axios = require('axios');
-const fs = require('fs');
+const readConfig = require('../configReader.js').readConfig;
 
 class Client{
     constructor(){
-        this.conf = JSON.parse(fs.readFileSync('./dataSources/serviceSrc/cli.conf'));
+        this.conf = readConfig('Service');
         this.hostname = this.conf['hostname'];
         this.port = this.conf['port'];
     }

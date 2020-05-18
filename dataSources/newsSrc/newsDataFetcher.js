@@ -1,10 +1,10 @@
 const NewsAPI = require('newsapi');
-const configReader = require('../configReader.js');
+const readConfig = require('../configReader.js').readConfig;
 
 class NewsDataFetcher{
     constructor(){
-        const config = configReader.readConfig('NewsDataFetcher');
-        this.newsapi = new NewsAPI(config);
+        const config = readConfig('NewsDataFetcher');
+        this.newsapi = new NewsAPI(config.key);
     }
 
     async fetch(queries){

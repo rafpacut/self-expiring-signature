@@ -1,6 +1,6 @@
 const dig = require('node-dig-dns');
 const crypto = require('crypto');
-const fs = require('fs');
+const readConfig = require('../configReader.js').readConfig;
 
 
 class DNSCacheInserter 
@@ -10,9 +10,7 @@ class DNSCacheInserter
         this.dnsPortrayalSize = dnsPortrayalSize;
         this.subDomainNameLength = subDomainNameLength;
 
-        const serverListPath = "./dataSources/dnsCacheSrc/serverList.json";
-        let rawData = fs.readFileSync(serverListPath);
-        this.dnsServers = JSON.parse(rawData);
+        this.dnsServers = readConfig('DNSCache');
     }
 
     async insertData(bitArray){
