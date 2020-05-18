@@ -23,7 +23,7 @@ class ConfigGenerator{
 
     genServiceConfig(){
        //sample config -- actually I want to forward user's expiration date and handle that in dataGenerator
-       let randomSignatureId = parseInt(crypto.randomBytes(32).toString('hex'), 10);
+       let randomSignatureId = crypto.randomBytes(32).readUInt32BE();
        return randomSignatureId;
     }
 
