@@ -1,16 +1,17 @@
 const NewsDataFetcher = require('./newsDataFetcher.js');
-//const reverseShamirSecretSharing = require('./rsss.js');
+const rsssCreate = require('./RSSS/rsss.js').rsssCreate;
 const crypto = require('crypto');
 
-//generate a list of random numbers.
 class NewsDataGenerator{
     async gen(conf){
         let queries = this.genQueries(conf);
         let f = new NewsDataFetcher();
-        let key = await f.fetch(queries);
-        //let [keyParts, portrayal] = await f.fetch(queries);
-        //let key = reverseShamirSecretSharing.merge(keyParts, conf);
-        return [key, queries];
+        let articleBuffers = await f.fetchSimple(queries);
+
+        let [key, shares_b64] = rsssCreate(conf.rsss.sharesNum, conf.rsss.threshold, articleBuffers);
+        let data = key.serialize();
+        let portrayal = {'shares_b64': shares_b64, 'queries':queries};
+        return [data, portrayal];
     }
 
     genQueries(conf){
@@ -20,6 +21,14 @@ class NewsDataGenerator{
             qs.push(randBytes.readUInt8());
         }
         return qs;
+    }
+
+
+    /*
+        @articles: assumes array of arrays of strings
+    */
+    articlesToBuffers(articles){
+        return articles.map((article) => Buffer.from(article));
     }
 }
 module.exports = NewsDataGenerator;

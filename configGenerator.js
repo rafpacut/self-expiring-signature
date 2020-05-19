@@ -28,8 +28,12 @@ class ConfigGenerator{
     }
 
     genNewsConfig(){
-        return {'queryByteSize':5,//it's casted to uint8 later
-                 'queryNum': 5};
+            return {'queryByteSize':5, 'queryNum':5,
+                        rsss : {
+                            'sharesNum': 4,
+                            'threshold':2
+                        }
+            };
     }
 }
 module.exports = ConfigGenerator;

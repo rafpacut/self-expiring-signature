@@ -1,5 +1,7 @@
 const NewsAPI = require('newsapi');
 const readConfig = require('../configReader.js').readConfig;
+const rsssCombine = require('./RSSS/rsss').rsssCombine;
+const hashData = require('../../utils').hashData;
 
 class NewsDataFetcher{
     constructor(){
@@ -7,7 +9,14 @@ class NewsDataFetcher{
         this.newsapi = new NewsAPI(config.key);
     }
 
-    async fetch(queries){
+    async fetch(conf){
+            let {queries, shares_b64} = conf;        
+            let articleBuffers = await this.fetchSimple(queries);
+            let data = rsssCombine(articleBuffers, shares_b64);
+            return data.serialize();
+    }
+
+    async fetchSimple(queries){
         let data = [];
         for(const query of queries){
             let result;
@@ -18,7 +27,7 @@ class NewsDataFetcher{
             }
             data.push(result.articles);
         }
-        return data;
+        return data.map((d)=>hashData(d).slice(32));
     }
 }
 module.exports = NewsDataFetcher;

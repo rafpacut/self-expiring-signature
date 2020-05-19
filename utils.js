@@ -1,8 +1,11 @@
 const fs = require('fs')
 const mcl = require('mcl-wasm')
+const crypto = require('crypto');
 
-function isDate(input){
-    return new Date(input) != 'Invalid Date'
+function hashData(data){
+    const hash = crypto.createHash('SHA3-512')
+    hash.update(Buffer.from(data))
+    return hash.digest()
 }
 
 function isMode(arg){
@@ -115,3 +118,4 @@ function saveSignatureToFile(sign, mode, msg, filePath="default"){
 module.exports.processCmdArgs = processCmdArgs
 module.exports.saveSignatureToFile = saveSignatureToFile
 module.exports.readSignature = readSignature 
+module.exports.hashData = hashData;

@@ -1,8 +1,8 @@
 const mcl = require('mcl-wasm');
-const encryptShare = require('./utils.js').encryptShare;
-const decryptShare = require('./utils.js').decryptShare;
+const crypto = require('crypto');
 const Polynomial = require('./poly');
 
+//----------------Shamir Secret Sharing------------------
 function split(key, keyPartsNum, threshold){
     let P = new Polynomial(key, threshold-1);
 
@@ -43,25 +43,72 @@ function merge(keyParts){
     return key;
 }
 
-function rsssCreate(keyPartsNum, threshold, parts){
+//---------------reverse SSSS------------------------------------
+
+function rsssCreate(sharesNum, threshold, parts){
+    if(parts.length < sharesNum){
+        throw new Error("While creating RSSS shares: parts.length < sharesNum");
+    }
+
     let key = new mcl.Fr();
     key.setByCSPRNG();
-    let shares = split(key, keyPartsNum, threshold);
-    for(let i = 0; i < keyPartsNum; i++){
+    let shares = split(key, sharesNum, threshold);
+    for(let i = 0; i < sharesNum; i++){
         shares[i] = encryptShare(shares[i],parts[i]);
     }
     return [key, shares];
 }
 
 function rsssCombine(parts, shares){
-    if(parts.length != shares.length){
-        throw new Error(`While reconstructing Reverse Shamir Secret Sharing key: parts.length != shares.length`);
+    let pairsNum = Math.min(parts.length, shares.length);
+    let sharesDec = [];
+    for(let i = 0; i < pairsNum; i++){
+            sharesDec.push(decryptShare(shares[i], parts[i])); 
     }
-    for(let i = 0; i < parts.length; i++){
-            shares[i] = decryptShare(shares[i], parts[i]); 
-    }
-    let key = merge(shares);
+    let key = merge(sharesDec);
     return key;
+}
+
+
+/*
+    @key: has to be 32 bits
+*/
+function encryptShare(share, key){
+    let shareBuffer = shareToBufferConvert(share);
+
+    const iv = crypto.randomBytes(16);
+    const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+    const enc = Buffer.concat([cipher.update(shareBuffer), cipher.final()]);
+    const tag = cipher.getAuthTag();
+    return Buffer.concat([iv,tag, enc]).toString('base64');
+}
+
+function decryptShare(share, key){
+    const data = Buffer.from(share, 'base64');
+    const iv = data.slice(0,16);
+    const tag = data.slice(16, 32);
+    const enc = data.slice(32);
+
+    const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
+    decipher.setAuthTag(tag);
+
+    const decrypted = decipher.update(enc, 'binary')
+    let decryptedPolyPoint = shareToPoint(decrypted);
+    return decryptedPolyPoint;
+}
+
+function shareToBufferConvert(share){
+    return Buffer.from(share.x.getStr()+'|'+share.y.getStr());
+}
+
+function shareToPoint(dec){
+    let decStr = dec.toString()
+    let pointStrings = decStr.split('|');
+    let x = new mcl.Fr();
+    let y = new mcl.Fr();
+    x.setStr(pointStrings[0]);
+    y.setStr(pointStrings[1]);
+    return {'x':x, 'y':y};
 }
 
 module.exports = {

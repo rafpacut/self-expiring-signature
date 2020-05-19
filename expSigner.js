@@ -3,7 +3,7 @@ const ShnorrVerifier = require('./signatureSchemes/shnorr/Verifier.js')
 const EphDataSource = require('./dataSources/ephDataSource.js')
 const ConfigGenerator = require('./configGenerator.js');
 const DNSRefresher = require('./dataSources/dnsCacheSrc/dnsCacheRefresher.js')
-const crypto = require("crypto")
+const hashData = require('./utils').hashData;
 
 class ExpiringSignature
 {
@@ -12,6 +12,7 @@ class ExpiringSignature
        this.mode = mode;
        this.dnsRefresher = new DNSRefresher();
 
+       //move that to ephDataSrc
        const configGenerator = new ConfigGenerator();
        this.dataSrcConf = configGenerator.genConfig(mode);
    }
@@ -22,7 +23,7 @@ class ExpiringSignature
        if(this.mode == "dns"){
            this.dnsRefresher.storeRefreshData(ephData, portrayal);
        }
-       let ephHash = this.hashData(ephData)
+       let ephHash = hashData(ephData)
        let signature = signer.sign(msg, ephHash)
        return [signature, signer.publicKey, portrayal]
    }
@@ -35,14 +36,8 @@ class ExpiringSignature
        let [s, X] = signature
        let verifier = new ShnorrVerifier(signerPubKey)
        let ephData = await this.ephDataSource.fetchData(portrayal)
-       let ephHash = this.hashData(ephData)
+       let ephHash = hashData(ephData)
        console.log(verifier.verify(msg, s, X, ephHash))
    }
-
-    hashData(data){
-        const hash = crypto.createHash('SHA3-512')
-        hash.update(Buffer.from(data))
-        return hash.digest()
-    }
 }
 module.exports = ExpiringSignature
