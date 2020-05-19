@@ -16,9 +16,10 @@ Implemented with pairing-based cryptography provided by [mcl](https://github.com
 `npm install`
 
 #### data sources configuration:
-To use news API obtain key [here](https://newsapi.org/pricing). Save your key in dataSources/newsSrc/newsAPI.key
+To use news API obtain key [here](https://newsapi.org/pricing).
+Save your key in /path/to/project/conf/newsAPI.key
 
-DNS mode requires a list of open resolver server IPs. Place those in dataSources/dnsCacheSrc/serverList.json.
+DNS mode requires a list of open resolver server IPs. Place those in /path/to/project/conf/serverList.json.
 The file should contain a list of IPs.
 
 ## usage
