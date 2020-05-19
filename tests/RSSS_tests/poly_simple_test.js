@@ -1,7 +1,6 @@
 var expect = require('chai').expect;
 const mcl = require('mcl-wasm');
-const RSSS = require('../../dataSources/newsSrc/rsss.js');
-const Poly = RSSS.Polynomial;
+const Poly = require('../../dataSources/newsSrc/RSSS/poly.js');
 
 describe('polynomial', function(){
     it('rises to power correctly', function(done){

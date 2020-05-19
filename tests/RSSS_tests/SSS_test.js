@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 const mcl = require('mcl-wasm');
-const merge = require('../../dataSources/newsSrc/rsss.js').merge;
-const split = require('../../dataSources/newsSrc/rsss.js').split;
+const merge = require('../../dataSources/newsSrc/RSSS/rsss.js').merge;
+const split = require('../../dataSources/newsSrc/RSSS/rsss.js').split;
 
 describe('ShamirSecretSharing algorithm', function(){
     it('recreates the key', function(done){
