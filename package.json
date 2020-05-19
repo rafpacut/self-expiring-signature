@@ -17,7 +17,7 @@
   },
   "scripts": {
     "build": "npm install",
-    "test": "mocha --recursive ./tests/RSSS_tests"
+    "test": "mocha --recursive ./tests"
   },
   "repository": {
     "type": "git",
