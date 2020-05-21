@@ -4,7 +4,7 @@ const fs = require('fs');
 let nameToPathMap = new Map();
 nameToPathMap.set('NewsDataFetcher', './conf/newsAPI.key');
 nameToPathMap.set('DNSCache', './conf/serverList.json');
-nameToPathMap.set('Service', './conf/cli.conf');
+nameToPathMap.set('Service', './conf/cli.json');
 
 module.exports = {
 readConfig : function(callerName){

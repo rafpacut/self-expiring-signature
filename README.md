@@ -22,6 +22,7 @@ Save your key in /path/to/project/conf/newsAPI.key
 DNS mode requires a list of open resolver server IPs. Place those in /path/to/project/conf/serverList.json.
 The file should contain a list of IPs.
 
+To use ''service' mode hostname and port of the server in /path/to/project/cli.json 
 ## usage
 #### sign:
 `node sign.js <mode> <message>`
