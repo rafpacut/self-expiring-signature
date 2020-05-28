@@ -2,6 +2,7 @@ const NewsAPI = require('newsapi');
 const readConfig = require('../configReader.js').readConfig;
 const rsssCombine = require('./RSSS/rsss').rsssCombine;
 const hashData = require('../../utils').hashData;
+const ApiMock = require('./apiMock');
 
 class NewsDataFetcher{
     constructor(){
@@ -11,23 +12,30 @@ class NewsDataFetcher{
 
     async fetch(conf){
             let {queries, shares_b64} = conf;        
-            let articleBuffers = await this.fetchSimple(queries);
-            let data = rsssCombine(articleBuffers, shares_b64);
+            let result = await this.fetchSimple(queries);
+            let parts = result.parts;
+
+            let data = rsssCombine(parts, shares_b64);
             return data.serialize();
     }
 
     async fetchSimple(queries){
         let data = [];
+        let queriesUsed = [];
         for(const query of queries){
             let result;
             try{
-                result = this.newsapi.v2.topHeadlines({'q': query});
+                result = await this.newsapi.v2.topHeadlines({'q': query});
             }catch(e){
                 throw new Error(`While fetching news data: ${e}`);
             }
-            data.push(result.articles);
+            if(result.articles.length != 0){
+                data.push(result.articles);
+                queriesUsed.push(query);
+            }
         }
-        return data.map((d)=>hashData(d).slice(32));
+        let hashedData = data.map((d)=>hashData(d).slice(32));
+        return {'parts':hashedData, 'queriesUsed':queriesUsed};
     }
 }
 module.exports = NewsDataFetcher;

@@ -3,12 +3,27 @@ const rsssCreate = require('./RSSS/rsss.js').rsssCreate;
 const crypto = require('crypto');
 
 class NewsDataGenerator{
-    async gen(conf){
-        let queries = this.genQueries(conf);
-        let f = new NewsDataFetcher();
-        let articleBuffers = await f.fetchSimple(queries);
 
-        let [key, shares_b64] = rsssCreate(conf.rsss.sharesNum, conf.rsss.threshold, articleBuffers);
+    async getParts(conf){
+        let f = new NewsDataFetcher();
+        let queries;
+        let parts;
+        let queriesUsed;
+
+        while(true){
+            queries = this.genQueries(conf);
+            ({parts, queriesUsed} = await f.fetchSimple(queries));
+            if(parts.length > conf.rsss.threshold){
+               break; 
+            }
+        }
+        return {'parts':parts, 'queries':queriesUsed};
+    } 
+
+    async gen(conf){
+        let {parts,queries} = await this.getParts(conf);
+
+        let [key, shares_b64] = rsssCreate(conf.rsss.sharesNum, conf.rsss.threshold, parts);
         let data = key.serialize();
         let portrayal = {'shares_b64': shares_b64, 'queries':queries};
         return [data, portrayal];
