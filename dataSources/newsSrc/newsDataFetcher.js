@@ -2,7 +2,6 @@ const NewsAPI = require('newsapi');
 const readConfig = require('../configReader.js').readConfig;
 const rsssCombine = require('./RSSS/rsss').rsssCombine;
 const hashData = require('../../utils').hashData;
-const ApiMock = require('./apiMock');
 
 class NewsDataFetcher{
     constructor(){
