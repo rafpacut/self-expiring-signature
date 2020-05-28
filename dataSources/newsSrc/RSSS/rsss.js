@@ -46,14 +46,17 @@ function merge(keyParts){
 //---------------reverse SSSS------------------------------------
 
 function rsssCreate(sharesNum, threshold, parts){
-    if(parts.length < sharesNum){
-        throw new Error("While creating RSSS shares: parts.length < sharesNum");
+    if(parts.length < threshold){
+        throw new Error("While creating RSSS shares: parts.length < threshold");
     }
+
 
     let key = new mcl.Fr();
     key.setByCSPRNG();
+
+    let pairsNum = Math.min(parts.length, sharesNum);
     let shares = split(key, sharesNum, threshold);
-    for(let i = 0; i < sharesNum; i++){
+    for(let i = 0; i < pairsNum; i++){
         shares[i] = encryptShare(shares[i],parts[i]);
     }
     return [key, shares];
