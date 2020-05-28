@@ -15,6 +15,8 @@ Implemented with pairing-based cryptography provided by [mcl](https://github.com
 
 `npm install`
 
+ `apt install dnsutils` (for dig package)
+
 #### data sources configuration:
 To use news API obtain key [here](https://newsapi.org/pricing).
 Save your key in /path/to/project/conf/newsAPI.key
