@@ -5,9 +5,13 @@ const DNSDataGenerator = require('./dnsCacheSrc/dnsDataGenerator.js');
 const NewsDataFetcher = require('./newsSrc/newsDataFetcher.js');
 const NewsDataGenerator = require('./newsSrc/newsDataGenerator.js');
 const Client = require('./serviceSrc/client.js');
+const ConfigGenerator = require('./../configGenerator.js');
 
 class EphDataSource{
     constructor(mode){
+        const configGenerator = new ConfigGenerator();
+        this.dataSrcConf = configGenerator.genConfig(mode);
+
         switch(mode){
             case "reddit":
                 this.dataGen = new RedditDataGenerator();
@@ -28,12 +32,12 @@ class EphDataSource{
         }
     }
 
-    fetchData(conf){
-        return this.fetcher.fetch(conf);
+    fetchData(portrayal){
+        return this.fetcher.fetch(portrayal);
     }
 
-    genData(conf){
-        return this.dataGen.gen(conf);
+    genData(){
+        return this.dataGen.gen(this.dataSrcConf);
     }
 }
 

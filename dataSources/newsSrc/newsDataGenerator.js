@@ -1,6 +1,6 @@
 const NewsDataFetcher = require('./newsDataFetcher.js');
 const rsssCreate = require('./RSSS/rsss.js').rsssCreate;
-const crypto = require('crypto');
+const cryptoRandomInt = require('crypto-random-int');
 
 class NewsDataGenerator{
 
@@ -8,16 +8,14 @@ class NewsDataGenerator{
         let f = new NewsDataFetcher();
         let queries;
         let parts;
-        let queriesUsed;
 
-        while(true){
-            queries = this.genQueries(conf);
-            ({parts, queriesUsed} = await f.fetchSimple(queries));
-            if(parts.length > conf.rsss.threshold){
-               break; 
-            }
+        queries = await this.genQueries(conf);
+        ({parts} = await f.fetchSimple(queries));
+        if(parts.length < conf.rsss.threshold){
+            throw new Error("when generating news data: parts.length < rsss.threshold");
         }
-        return {'parts':parts, 'queries':queriesUsed};
+
+        return {'parts':parts, 'queries':queries};
     } 
 
     async gen(conf){
@@ -29,11 +27,17 @@ class NewsDataGenerator{
         return [data, portrayal];
     }
 
-    genQueries(conf){
+    async genQueries(conf){
         let qs = [];
         for(let i = 0; i < conf.queryNum; i++){
-            let randBytes = crypto.randomBytes(conf.queryByteSize);
-            qs.push(randBytes.readUInt8());
+            cryptoRandomInt(3000, 9999)
+            .then((randInt)=>{
+                console.log(randInt);
+                qs.push(randInt);
+            })
+            .catch((err)=>{
+                throw err;
+            })
         }
         return qs;
     }

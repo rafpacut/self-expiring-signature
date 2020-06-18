@@ -1,7 +1,6 @@
 const ShnorrSigner = require('./signatureSchemes/shnorr/Signer.js')
 const ShnorrVerifier = require('./signatureSchemes/shnorr/Verifier.js')
 const EphDataSource = require('./dataSources/ephDataSource.js')
-const ConfigGenerator = require('./configGenerator.js');
 const DNSRefresher = require('./dataSources/dnsCacheSrc/dnsCacheRefresher.js')
 const hashData = require('./utils').hashData;
 
@@ -11,15 +10,11 @@ class ExpiringSignature
        this.ephDataSource = new EphDataSource(mode);
        this.mode = mode;
        this.dnsRefresher = new DNSRefresher();
-
-       //move that to ephDataSrc
-       const configGenerator = new ConfigGenerator();
-       this.dataSrcConf = configGenerator.genConfig(mode);
    }
 
    async sign(msg){
        let signer = new ShnorrSigner();
-       let [ephData, portrayal] = await this.ephDataSource.genData(this.dataSrcConf);
+       let [ephData, portrayal] = await this.ephDataSource.genData();
        if(this.mode == "dns"){
            this.dnsRefresher.storeRefreshData(ephData, portrayal);
        }

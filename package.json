@@ -5,11 +5,13 @@
   "main": "sign.js",
   "dependencies": {
     "axios": "^0.19.2",
+    "crypto-random-int": "^1.0.1",
     "express": "^4.17.1",
     "mcl-wasm": "^0.3.7",
     "newsapi": "^2.4.0",
     "node-dig-dns": "^0.2.10",
-    "snoowrap": "^1.21.0"
+    "snoowrap": "^1.21.0",
+    "tiny-json-http": "^7.2.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
@@ -17,7 +19,7 @@
   },
   "scripts": {
     "build": "npm install",
-    "test": "mocha --recursive ./tests"
+    "test": "mocha --recursive ./tests/newsSrc_tests"
   },
   "repository": {
     "type": "git",

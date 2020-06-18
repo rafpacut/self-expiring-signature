@@ -3,6 +3,7 @@ const fs = require('fs');
 
 let nameToPathMap = new Map();
 nameToPathMap.set('NewsDataFetcher', './conf/newsAPI.key');
+nameToPathMap.set('gnews', './conf/gnews.key')
 nameToPathMap.set('DNSCache', './conf/serverList.json');
 nameToPathMap.set('Service', './conf/cli.json');
 

@@ -28,7 +28,7 @@ class ConfigGenerator{
     }
 
     genNewsConfig(){
-            return {'queryByteSize':5, 'queryNum':5,
+            return {'queryNum':10,
                         rsss : {
                             'sharesNum': 4,
                             'threshold':2
