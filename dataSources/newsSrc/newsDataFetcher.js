@@ -31,8 +31,6 @@ class NewsDataFetcher{
             }
             if(result.body.articleCount > 0){
                 let articleTitles = result.body.articles.map((art)=> art.title);
-                console.log(query)
-                console.log(articleTitles)
                 data.push(articleTitles);
             }
         }
