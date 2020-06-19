@@ -1,7 +1,6 @@
 const mcl = require('mcl-wasm');
 const crypto = require('crypto');
 const Polynomial = require('./poly');
-const { hashData } = require('../../../utils');
 
 //----------------Shamir Secret Sharing------------------
 function split(key, keyPartsNum, threshold){
@@ -55,15 +54,10 @@ function rsssCreate(sharesNum, threshold, parts){
     let key = new mcl.Fr();
     key.setByCSPRNG();
 
-    //rn, they are the same length -- just some are hashed zeroes
-    //to dodge finding matching pairs when lengths are different
     let pairsNum = Math.min(parts.length, sharesNum);
     let shares = split(key, sharesNum, threshold);
-    let emptyPart = hashData(0);
     for(let i = 0; i < pairsNum; i++){
-        if(parts[i] != emptyPart){
-            shares[i] = encryptShare(shares[i],parts[i]);
-        }
+        shares[i] = encryptShare(shares[i],parts[i]);
     }
     return [key, shares];
 }
