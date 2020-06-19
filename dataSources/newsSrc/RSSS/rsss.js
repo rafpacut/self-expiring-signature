@@ -66,7 +66,14 @@ function rsssCombine(parts, shares){
     let pairsNum = Math.min(parts.length, shares.length);
     let sharesDec = [];
     for(let i = 0; i < pairsNum; i++){
+        try{
             sharesDec.push(decryptShare(shares[i], parts[i])); 
+        }
+        catch(e){
+            if(e.message != "decryption failed"){
+                throw e;
+            }
+        }
     }
     let key = merge(sharesDec);
     return key;
@@ -87,17 +94,22 @@ function encryptShare(share, key){
 }
 
 function decryptShare(share, key){
-    const data = Buffer.from(share, 'base64');
-    const iv = data.slice(0,16);
-    const tag = data.slice(16, 32);
-    const enc = data.slice(32);
+    try{
+        const data = Buffer.from(share, 'base64');
+        const iv = data.slice(0,16);
+        const tag = data.slice(16, 32);
+        const enc = data.slice(32);
 
-    const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
-    decipher.setAuthTag(tag);
+        const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
+        decipher.setAuthTag(tag);
 
-    const decrypted = decipher.update(enc, 'binary')
-    let decryptedPolyPoint = shareToPoint(decrypted);
-    return decryptedPolyPoint;
+        const decrypted = decipher.update(enc, 'binary')
+        let decryptedPolyPoint = shareToPoint(decrypted);
+        return decryptedPolyPoint;
+    }
+    catch(e){
+        throw e;
+    }
 }
 
 function shareToBufferConvert(share){
@@ -105,13 +117,18 @@ function shareToBufferConvert(share){
 }
 
 function shareToPoint(dec){
-    let decStr = dec.toString()
-    let pointStrings = decStr.split('|');
-    let x = new mcl.Fr();
-    let y = new mcl.Fr();
-    x.setStr(pointStrings[0]);
-    y.setStr(pointStrings[1]);
-    return {'x':x, 'y':y};
+    try{
+        let decStr = dec.toString()
+        let pointStrings = decStr.split('|');
+        let x = new mcl.Fr();
+        let y = new mcl.Fr();
+        x.setStr(pointStrings[0]);
+        y.setStr(pointStrings[1]);
+        return {'x':x, 'y':y};
+    }
+    catch(e){
+        throw new Error("decryption failed");
+    }
 }
 
 module.exports = {
