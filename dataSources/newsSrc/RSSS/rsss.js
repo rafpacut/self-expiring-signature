@@ -69,11 +69,7 @@ function rsssCombine(parts, shares){
         try{
             sharesDec.push(decryptShare(shares[i], parts[i])); 
         }
-        catch(e){
-            if(e.message != "decryption failed"){
-                throw e;
-            }
-        }
+        catch(e){}//ignore errors$
     }
     let key = merge(sharesDec);
     return key;
