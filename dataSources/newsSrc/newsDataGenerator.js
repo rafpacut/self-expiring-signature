@@ -32,7 +32,6 @@ class NewsDataGenerator{
         for(let i = 0; i < conf.queryNum; i++){
             cryptoRandomInt(3000, 9999)
             .then((randInt)=>{
-                console.log(randInt);
                 qs.push(randInt);
             })
             .catch((err)=>{
