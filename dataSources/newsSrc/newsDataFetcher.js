@@ -33,6 +33,9 @@ class NewsDataFetcher{
                 let articleTitles = result.body.articles.map((art)=> art.title);
                 data.push(articleTitles);
             }
+            else{
+                data.push([0])
+            }
         }
         let hashedData = data.map((d)=>hashData(d).slice(32));
         return {'parts':hashedData};
