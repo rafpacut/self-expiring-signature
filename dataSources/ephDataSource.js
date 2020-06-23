@@ -13,10 +13,6 @@ class EphDataSource{
         this.dataSrcConf = configGenerator.genConfig(mode);
 
         switch(mode){
-            case "reddit":
-                this.dataGen = new RedditDataGenerator();
-                this.fetcher = new RedditFetcher();
-                break;
             case "dns":
                 this.dataGen = new DNSDataGenerator();
                 this.fetcher = new DNSCacheFetcher();
