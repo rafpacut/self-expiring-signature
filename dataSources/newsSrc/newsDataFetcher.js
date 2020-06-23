@@ -30,14 +30,14 @@ class NewsDataFetcher{
                 throw new Error(`While fetching news data: ${e}`);
             }
             if(result.body.articleCount > 0){
-                let articleTitles = result.body.articles.map((art)=> art.title);
+                let articleTitles = result.body.articles.map((art)=> art.title).join();
                 data.push(articleTitles);
             }
             else{
                 data.push([0])
             }
         }
-        let hashedData = data.map((d)=>hashData(d).slice(32));
+        let hashedData = data.map((d)=>hashData(d).slice(0,32));
         return {'parts':hashedData};
     }
 }
