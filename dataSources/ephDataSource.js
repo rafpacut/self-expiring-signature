@@ -28,11 +28,11 @@ class EphDataSource{
         }
     }
 
-    fetchData(portrayal){
+    async fetchData(portrayal){
         return this.fetcher.fetch(portrayal);
     }
 
-    genData(){
+    async genData(){
         return this.dataGen.gen(this.dataSrcConf);
     }
 }
