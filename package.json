@@ -4,7 +4,7 @@
   "description": "",
   "main": "sign.js",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "crypto-random-int": "^1.0.1",
     "express": "^4.17.1",
     "mcl-wasm": "^0.3.7",
