@@ -6,7 +6,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "crypto-random-int": "^1.0.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "mcl-wasm": "^0.3.7",
     "newsapi": "^2.4.0",
     "node-dig-dns": "^0.2.10",
